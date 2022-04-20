@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 
 import javax.mail.Address;
@@ -103,6 +104,7 @@ public class BufferingIncidentHandlerTest {
     when(incEnt.getProcessInstanceId()).thenReturn("processInstanceId");
 
     final Date now = DateUtils.parseDate("2020-11-23 10:22", "yyyy-MM-dd HH:mm");
+    String timeZone = TimeZone.getDefault().getDisplayName(TimeZone.getDefault().inDaylightTime(now), TimeZone.SHORT);
     when(timeProvider.now()).thenReturn(now);
 
     when(incEnt.getProcessDefinitionId()).thenReturn("processDefinitionId");
@@ -121,7 +123,7 @@ public class BufferingIncidentHandlerTest {
     assertEquals("activityId", actRes.getActivityId());
     assertEquals("Message with curly braces and a  dollar sign", actRes.getMessage());
     assertEquals("processInstanceId", actRes.getProcessInstanceId());
-    assertEquals("2020-11-23 10:22:00 CET", actRes.getTime());
+    assertEquals("2020-11-23 10:22:00 " + timeZone, actRes.getTime());
     assertEquals("processDefinitionId", actRes.getProcessDefinitionId());
     assertEquals("Process Definition Name", actRes.getProcessDefinitionName());
     assertNotNull(actRes.getRecipientInfo());
